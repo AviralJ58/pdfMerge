@@ -88,6 +88,17 @@ def merge_pdfs(output):
         for filename in converted:
             os.remove(filename)
 
+def compress_pdf(inp):
+    from pylovepdf.ilovepdf import ILovePdf
+    public_key='project_public_48f3e3103bf52723e23da3527de74647_EwXuCf35023e65ee10f2c620e18f17f215125'
+    ilovepdf=ILovePdf(public_key, verify_ssl=True)
+    compressor=ilovepdf.new_task('compress')
+    compressor.add_file(inp+'.pdf')
+    compressor.set_output_folder(location)
+    compressor.execute()
+    compressor.download()
+    compressor.delete_current_task()
+
 location=input("Folder path:\n")
 print("The PDFs in the folder are: ")
 display_files(location)
@@ -98,4 +109,13 @@ select_files(flag)
 output=input("Output Filename:\n")
 merge_pdfs(output)
 
-wait=input('PDFs merged! Check the source folder for output file. Press ENTER to exit.')
+if (input("PDFs merged! Do you want to compress the pdf (requires internet)? Y/N\n").upper()=='Y'):
+    try:
+        compress_pdf(output)
+        os.remove(output+'.pdf')
+        wait=input('PDF compressed! Check the source folder for output file. Press ENTER to exit.')
+    except:
+        wait=input("Can't compress the file as the connection can't be established due to a network error. Check the source folder for output file. Press ENTER to exit.")
+
+else:
+    wait=input('Process complete! Check the source folder for output file. Press ENTER to exit.')
