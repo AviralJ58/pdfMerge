@@ -133,7 +133,7 @@ def showData():
 root=Tk()
 root.title("pdfMerge")
 
-location = filedialog.askdirectory(initialdir="Users/Kushagra/Desktop/testing",title="Select a Directory")
+location = filedialog.askdirectory(initialdir="/",title="Select a Directory")
 
 tkinter.messagebox.showinfo("ALERT","Please minimise the main window and reopen it! sorry for the technical issue!")
 
