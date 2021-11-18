@@ -13,5 +13,3 @@ The user has **two options**:
  2) Merge selective files by choosing from a list of files available in the directory in specified order.
 
 The user can choose to compress the final PDF file. However, this requires an active internet connection. 
-
->⚠️ **Known Error:** Compression doesn't work in .exe file but it works in .py file.

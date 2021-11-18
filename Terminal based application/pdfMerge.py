@@ -1,4 +1,5 @@
 import os, PyPDF2, win32com.client
+from pylovepdf.ilovepdf import ILovePdf
 
 def display_files(location):
     global all_pdfs
@@ -89,7 +90,6 @@ def merge_pdfs(output):
             os.remove(filename)
 
 def compress_pdf(inp):
-    from pylovepdf.ilovepdf import ILovePdf
     public_key='project_public_48f3e3103bf52723e23da3527de74647_EwXuCf35023e65ee10f2c620e18f17f215125'
     ilovepdf=ILovePdf(public_key, verify_ssl=True)
     compressor=ilovepdf.new_task('compress')
