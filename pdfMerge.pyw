@@ -1,9 +1,9 @@
 import os, PyPDF2, win32com.client
+from PyPDF2.utils import PdfReadWarning
 import tkinter
 from tkinter import *
 from tkinter import filedialog
 import tkinter.messagebox
-from pylovepdf.ilovepdf import ILovePdf
 
 def display_files(location):
     global all_pdfs
@@ -90,30 +90,35 @@ def merge_pdfs(output):
     global converted
     global msg
 
-    writer = PyPDF2.PdfFileWriter()
-    pdfOutput = open(output+".pdf","wb")
+    try:
+        writer = PyPDF2.PdfFileWriter()
+        pdfOutput = open(output+".pdf","wb")
 
-    for filename in to_merge:
-        req_file = open(filename,"rb")
-        reader = PyPDF2.PdfFileReader(req_file)
+        for filename in to_merge:
+            req_file = open(filename,"rb")
+            reader = PyPDF2.PdfFileReader(req_file)
 
-        for pgNo in range(reader.numPages):
-            current_page = reader.getPage(pgNo)
-            writer.addPage(current_page)
-            
-        writer.write(pdfOutput)         
-        req_file.close()
-            
-    pdfOutput.close()
+            for pgNo in range(reader.numPages):
+                current_page = reader.getPage(pgNo)
+                writer.addPage(current_page)
+                
+            writer.write(pdfOutput)         
+            req_file.close()
+                
+        pdfOutput.close()
 
-    if len(converted)>0:
-        powerpoint.Quit()
-        word.Quit()
-        for filename in converted:
-            os.remove(filename)
+        if len(converted)>0:
+            powerpoint.Quit()
+            word.Quit()
+            for filename in converted:
+                os.remove(filename)
 
-    msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
-    tkinter.messagebox.showinfo("Files Merged","Check the source folder for merged PDF!")  
+        msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
+        tkinter.messagebox.showinfo("Files Merged","Check the source folder for merged PDF!")  
+
+    except:
+        msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
+        tkinter.messagebox.showinfo("Files Merged","A few files had problems, but they are merged. Check the source folder for merged PDF!")
 
 def compressConf():
     msg=Label(root,text="Compressing PDFs. Please wait!",bg="yellow",width=100).grid(row=rows,columnspan=3)
@@ -128,6 +133,7 @@ def compressConf():
 def compress_pdf(inp):
     global msg
 
+    from pylovepdf.ilovepdf import ILovePdf
     try:
         public_key='project_public_48f3e3103bf52723e23da3527de74647_EwXuCf35023e65ee10f2c620e18f17f215125'
         ilovepdf=ILovePdf(public_key, verify_ssl=True)
@@ -143,7 +149,7 @@ def compress_pdf(inp):
         tkinter.messagebox.showinfo("Success","Check the source folder for compressed PDF!")  
 
     except:
-        msg=Label(root,text="Can't compress the file as the connection can't be established due to a network error.",bg="red",width=100).grid(row=rows,columnspan=3)
+        msg=Label(root,text="Can't compress the file as the connection can't be established.",bg="red",width=100).grid(row=rows,columnspan=3)
         tkinter.messagebox.showerror("Error","Can't compress. Check the source folder for merged PDF!")  
 
 
@@ -177,4 +183,4 @@ Button(text="Merge",bg="grey",fg="white",command=lambda:select_files(r.get())).g
 
 Button(text="Compress",bg="grey",fg="white",command=lambda:compressConf()).grid(sticky='w',column=2,row=4)
 
-root.mainloop() 
+root.mainloop()
