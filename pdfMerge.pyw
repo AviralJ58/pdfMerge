@@ -107,18 +107,19 @@ def merge_pdfs(output):
                 
         pdfOutput.close()
 
-        if len(converted)>0:
-            powerpoint.Quit()
-            word.Quit()
-            for filename in converted:
-                os.remove(filename)
-
         msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
         tkinter.messagebox.showinfo("Files Merged","Check the source folder for merged PDF!")  
 
     except:
         msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
         tkinter.messagebox.showinfo("Files Merged","A few files had problems, but they are merged. Check the source folder for merged PDF!")
+    
+    finally:
+        if len(converted)>0:
+            powerpoint.Quit()
+            word.Quit()
+            for filename in converted:
+                os.remove(filename)
 
 def compressConf():
     msg=Label(root,text="Compressing PDFs. Please wait!",bg="yellow",width=100).grid(row=rows,columnspan=3)
