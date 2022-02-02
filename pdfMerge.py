@@ -201,7 +201,7 @@ e=Entry(root,text="filename",width=40,borderwidth=5)
 e.grid(row=3,column=1,columnspan=3, sticky=E+W+N, padx=10)
 
 Label(root,bg='#282C34',fg='white',text="If all files are not to be merged, enter file no. in order separated by ',' :").grid(column=0,row=4, sticky=E+W+N, pady=10)
-k=Entry(root,text="fileno",width=40,borderwidth=5,state=DISABLED)
+k=Entry(root,text="fileno",width=40,borderwidth=5)
 k.grid(row=4,column=1, pady=10,columnspan=3,sticky=E+W+N, padx=10)
 
 button3=Button(text="Merge",bg="grey",fg="white",command=lambda:select_files(r.get()),state='disabled')
