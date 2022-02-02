@@ -39,7 +39,7 @@ def display_files(location):
                 ppt = powerpoint.Presentations.Open(inputfile)
                 ppt.SaveAs(outputfile, 32)
                 ppt.Close()
-                
+
                 all_pdfs.append(temp)
                 converted.append(temp)
                 s=str(count)+'.'+(temp)
@@ -48,7 +48,7 @@ def display_files(location):
                 # l.grid(row=rows,column=0,columnspan=3)
                 # rows+=1
                 count+=1
-            
+
             elif (filename.endswith('.doc') or filename.endswith('.docx')):
                 temp=filename.split('.')[0]
                 temp=temp+'.pdf'
@@ -57,7 +57,7 @@ def display_files(location):
                 doc = word.Documents.Open(inputfile)
                 doc.SaveAs(outputfile, 17)
                 doc.Close()
-                
+
                 all_pdfs.append(temp)
                 converted.append(temp)
                 s=str(count)+'.'+(temp)
@@ -83,7 +83,7 @@ def select_files(flag):
     global rows
     global e
     global msg
-  
+
     if (flag=='Y'):
         to_merge = all_pdfs
 
@@ -91,13 +91,13 @@ def select_files(flag):
         to_merge = []
         global k
         req=list(map(int,k.get().split(',')))
-        to_merge.append(all_pdfs[i-1])
-
+        for i in req:
+            to_merge.append(all_pdfs[i - 1])
     rows+=1
-    
+
     msg=Label(root,text="Merging PDFs",bg="yellow",width=100).grid(row=rows,columnspan=3)
-    tkinter.messagebox.showinfo("Processing","Please wait for the process to complete!")  
-    merge_pdfs(e.get())    
+    tkinter.messagebox.showinfo("Processing","Please wait for the process to complete!")
+    merge_pdfs(e.get())
 
 def merge_pdfs(output):
     global converted
@@ -114,19 +114,19 @@ def merge_pdfs(output):
             for pgNo in range(reader.numPages):
                 current_page = reader.getPage(pgNo)
                 writer.addPage(current_page)
-                
-            writer.write(pdfOutput)         
+
+            writer.write(pdfOutput)
             req_file.close()
-                
+
         pdfOutput.close()
 
         msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
-        tkinter.messagebox.showinfo("Files Merged","Check the source folder for merged PDF!")  
+        tkinter.messagebox.showinfo("Files Merged","Check the source folder for merged PDF!")
 
     except:
         msg=Label(root,text="PDFs merged!",bg="green",width=100).grid(row=rows,columnspan=3)
         tkinter.messagebox.showinfo("Files Merged","A few files had problems, but they are merged. Check the source folder for merged PDF!")
-    
+
     finally:
         if len(converted)>0:
             powerpoint.Quit()
@@ -136,11 +136,11 @@ def merge_pdfs(output):
 
 def compressConf():
     msg=Label(root,text="Compressing PDFs. Please wait!",bg="yellow",width=100).grid(row=rows,columnspan=3)
-    res=tkinter.messagebox.askyesno("Confirmation","Compression may take some time. Do you wish to continue?") 
+    res=tkinter.messagebox.askyesno("Confirmation","Compression may take some time. Do you wish to continue?")
     if res:
         compress_pdf(e.get())
     else:
-        tkinter.messagebox.showerror("Cancelled","Check the source folder for merged PDF!")  
+        tkinter.messagebox.showerror("Cancelled","Check the source folder for merged PDF!")
         msg=Label(root,text="Compression aborted by user.",bg="red",width=100).grid(row=rows,columnspan=3)
 
 
@@ -160,18 +160,18 @@ def compress_pdf(inp):
         os.remove(e.get()+'.pdf')
 
         msg=Label(root,text="PDF compressed!",bg="green",width=100).grid(row=rows,columnspan=3)
-        tkinter.messagebox.showinfo("Success","Check the source folder for compressed PDF!")  
+        tkinter.messagebox.showinfo("Success","Check the source folder for compressed PDF!")
 
     except:
         msg=Label(root,text="Can't compress the file as the connection can't be established.",bg="red",width=100).grid(row=rows,columnspan=3)
-        tkinter.messagebox.showerror("Error","Can't compress. Check the source folder for merged PDF!")  
+        tkinter.messagebox.showerror("Error","Can't compress. Check the source folder for merged PDF!")
 
 
 root=Tk()
 root.title("pdfMerge")
 root.configure(bg='#282C34')
 root.geometry('550x325')
-photo = PhotoImage(file = "pdfmerge-icon.png")
+photo = PhotoImage(file = './pdfmerge-icon.png')
 root.iconbitmap(r'pdfmerge-icon.ico')
 root.iconphoto(True, photo)
 frm = Frame(root)
@@ -179,7 +179,7 @@ frm.grid(row=7, column=0, sticky=N+S)
 root.rowconfigure(1, weight=1)
 root.columnconfigure(1, weight=1)
 
-tkinter.messagebox.showinfo("Select Folder","Please select the desired folder!")  
+tkinter.messagebox.showinfo("Select Folder","Please select the desired folder!")
 
 location = filedialog.askdirectory(initialdir="C:/Users/Kushagra/Desktop/test",title="Select a Directory")
 
